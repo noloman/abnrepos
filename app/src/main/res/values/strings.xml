@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">abnrepos</string>
+    <string name="open_url_button_text">Open URL</string>
 </resources>
