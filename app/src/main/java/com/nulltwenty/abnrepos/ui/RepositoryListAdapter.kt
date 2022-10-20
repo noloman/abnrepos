@@ -13,7 +13,7 @@ import coil.transform.CircleCropTransformation
 import com.nulltwenty.abnrepos.R
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
 
-class RepositoryListAdapter : ListAdapter<AbnRepo, RepositoryListAdapter.RepositoryViewHolder>(
+class RepositoryListAdapter(val onClickListener: (AbnRepo) -> Unit) : ListAdapter<AbnRepo, RepositoryListAdapter.RepositoryViewHolder>(
     RepositoryDiffCallback
 ) {
     inner class RepositoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -40,6 +40,7 @@ class RepositoryListAdapter : ListAdapter<AbnRepo, RepositoryListAdapter.Reposit
 
     override fun onBindViewHolder(holder: RepositoryViewHolder, position: Int) {
         val abnRepo = getItem(position)
+        holder.itemView.setOnClickListener { onClickListener.invoke(abnRepo) }
         holder.bind(abnRepo)
     }
 }

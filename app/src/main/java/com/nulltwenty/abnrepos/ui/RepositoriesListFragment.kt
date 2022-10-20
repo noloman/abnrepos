@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -30,7 +32,11 @@ class RepositoriesListFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.repositoryListRecyclerView)
         val loadingProgressIndicator =
             view.findViewById<CircularProgressIndicator>(R.id.loadingProgressIndicator)
-        val adapter = RepositoryListAdapter()
+        val adapter = RepositoryListAdapter {
+            val action: NavDirections =
+                RepositoriesListFragmentDirections.actionRepositoriesListFragmentToDetailFragment(it)
+            findNavController().navigate(action)
+        }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         viewLifecycleOwner.lifecycleScope.launch {

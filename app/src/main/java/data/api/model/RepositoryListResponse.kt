@@ -10,10 +10,12 @@ data class RepositoryListResponseElement(
     val id: Long? = null,
     val nodeID: String? = null,
     val name: String,
-    val fullName: String? = null,
+    @Json(name = "full_name")
+    val fullName: String,
     val private: Boolean,
     val owner: Owner,
-    val htmlURL: String? = null,
+    @Json(name = "html_url")
+    val htmlURL: String,
     val description: String? = null,
     val fork: Boolean? = null,
     val url: String? = null,

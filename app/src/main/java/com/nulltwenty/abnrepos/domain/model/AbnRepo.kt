@@ -1,5 +1,17 @@
 package com.nulltwenty.abnrepos.domain.model
 
+import android.os.Parcelable
+import androidx.annotation.Keep
 import data.api.model.Visibility
+import kotlinx.parcelize.Parcelize
 
-data class AbnRepo(val name: String, val avatarUrl: String?, val visibility: Visibility)
+@Parcelize
+@Keep
+data class AbnRepo(
+    val name: String,
+    val fullName: String,
+    val avatarUrl: String?,
+    val description: String?,
+    val htmlUrl: String,
+    val visibility: Visibility
+) : Parcelable
