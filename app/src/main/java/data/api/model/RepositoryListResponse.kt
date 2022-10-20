@@ -1,7 +1,11 @@
 package data.api.model
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
 typealias RepositoryListResponse = List<RepositoryListResponseElement>
 
+@JsonClass(generateAdapter = true)
 data class RepositoryListResponseElement(
     val id: Long? = null,
     val nodeID: String? = null,
@@ -84,11 +88,10 @@ data class RepositoryListResponseElement(
 )
 
 enum class DefaultBranch {
-    Develop,
-    Main,
-    Master
+    Develop, Main, Master
 }
 
+@JsonClass(generateAdapter = true)
 data class License(
     val key: String? = null,
     val name: String? = null,
@@ -97,11 +100,12 @@ data class License(
     val nodeID: String? = null
 )
 
+@JsonClass(generateAdapter = true)
 data class Owner(
     val login: Login? = null,
     val id: Long? = null,
     val nodeID: NodeID? = null,
-    val avatarURL: String? = null,
+    @Json(name = "avatar_url") val avatarURL: String? = null,
     val gravatarID: String? = null,
     val url: String? = null,
     val htmlURL: String? = null,

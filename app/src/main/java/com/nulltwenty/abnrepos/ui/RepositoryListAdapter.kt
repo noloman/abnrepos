@@ -3,10 +3,13 @@ package com.nulltwenty.abnrepos.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.nulltwenty.abnrepos.R
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
 
@@ -15,9 +18,17 @@ class RepositoryListAdapter : ListAdapter<AbnRepo, RepositoryListAdapter.Reposit
 ) {
     inner class RepositoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val repositoryName: TextView = itemView.findViewById(R.id.repositoryName)
+        private val repositoryVisibility: TextView =
+            itemView.findViewById(R.id.repositoryVisibility)
+        private val ownerAvatar: ImageView = itemView.findViewById(R.id.repositoryOwnerAvatar)
 
         fun bind(repo: AbnRepo) {
             repositoryName.text = repo.name
+            repositoryVisibility.text = repo.visibility.name
+            ownerAvatar.load(repo.avatarUrl) {
+                crossfade(true)
+                transformations(CircleCropTransformation())
+            }
         }
     }
 

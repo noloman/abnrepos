@@ -40,4 +40,4 @@ private fun RepositoryListResponse.toDomainModel(): List<AbnRepo> = map { repoEl
 }
 
 private fun RepositoryListResponseElement.toDomainModel(): AbnRepo =
-    AbnRepo(name, owner.avatarURL, visibility, private)
+    AbnRepo(name, owner.avatarURL, visibility)
