@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -45,7 +46,14 @@ class RepositoriesListFragment : Fragment() {
         viewModel.uiState.collect {
             when {
                 it.loading -> loadingProgressIndicator.visibility = View.VISIBLE
-                it.error != null -> loadingProgressIndicator.visibility = View.GONE
+                it.error != null -> {
+                    loadingProgressIndicator.visibility = View.GONE
+                    AlertDialog.Builder(requireContext()).setMessage("Unexpected error")
+                        .setNegativeButton(getString(android.R.string.ok)) { dialog, _ ->
+                            dialog.dismiss()
+                            requireActivity().finish()
+                        }.show()
+                }
                 it.repositoryList?.isNotEmpty() == true -> {
                     loadingProgressIndicator.visibility = View.GONE
                     adapter.submitList(it.repositoryList)

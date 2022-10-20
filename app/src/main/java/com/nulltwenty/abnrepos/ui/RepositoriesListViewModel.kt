@@ -28,7 +28,9 @@ class RepositoriesListViewModel @Inject constructor(private val repositoryListUs
             try {
                 _uiState.update { state ->
                     when (val repositoryList = repositoryListUseCase.invoke()) {
-                        is ResultOf.Error -> state.copy()
+                        is ResultOf.Error -> state.copy(
+                            loading = false, error = repositoryList.exception.message
+                        )
                         is ResultOf.Success -> state.copy(
                             loading = false, error = null, repositoryList = repositoryList.data
                         )
@@ -42,7 +44,5 @@ class RepositoriesListViewModel @Inject constructor(private val repositoryListUs
 }
 
 data class RepositoryListUiState(
-    val loading: Boolean,
-    val error: String? = null,
-    val repositoryList: List<AbnRepo>? = null
+    val loading: Boolean, val error: String? = null, val repositoryList: List<AbnRepo>? = null
 )
