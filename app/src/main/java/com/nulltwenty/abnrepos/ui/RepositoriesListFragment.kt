@@ -18,11 +18,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RepositoriesListFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = RepositoriesListFragment()
-    }
-
     private val viewModel: RepositoriesListViewModel by viewModels()
 
     override fun onCreateView(
