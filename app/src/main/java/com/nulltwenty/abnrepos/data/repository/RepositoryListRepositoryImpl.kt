@@ -1,5 +1,6 @@
 package com.nulltwenty.abnrepos.data.repository
 
+import com.nulltwenty.abnrepos.data.di.IoCoroutineDispatcher
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
 import com.nulltwenty.abnrepos.domain.model.ResultOf
 import com.nulltwenty.abnrepos.domain.safeApiCall
@@ -13,7 +14,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class RepositoryListRepositoryImpl @Inject constructor(
-    private val ioCoroutineDispatcher: CoroutineDispatcher, private val githubService: GithubService
+    @IoCoroutineDispatcher private val ioCoroutineDispatcher: CoroutineDispatcher,
+    private val githubService: GithubService
 ) : RepositoryListRepository {
     override suspend fun fetchRepositoryList(): ResultOf<List<AbnRepo>> =
         withContext(ioCoroutineDispatcher) {
