@@ -8,16 +8,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nulltwenty.abnrepos.R
-import data.api.model.RepositoryListResponseElement
+import com.nulltwenty.abnrepos.domain.model.AbnRepo
 
-class RepositoryListAdapter :
-    ListAdapter<RepositoryListResponseElement, RepositoryListAdapter.RepositoryViewHolder>(
-        RepositoryDiffCallback
-    ) {
+class RepositoryListAdapter : ListAdapter<AbnRepo, RepositoryListAdapter.RepositoryViewHolder>(
+    RepositoryDiffCallback
+) {
     inner class RepositoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val repositoryName: TextView = itemView.findViewById(R.id.repositoryName)
 
-        fun bind(repo: RepositoryListResponseElement) {
+        fun bind(repo: AbnRepo) {
             repositoryName.text = repo.name
         }
     }
@@ -29,18 +28,18 @@ class RepositoryListAdapter :
     }
 
     override fun onBindViewHolder(holder: RepositoryViewHolder, position: Int) {
-        val place = getItem(position)
-        holder.bind(place)
+        val abnRepo = getItem(position)
+        holder.bind(abnRepo)
     }
 }
 
-object RepositoryDiffCallback : DiffUtil.ItemCallback<RepositoryListResponseElement>() {
+object RepositoryDiffCallback : DiffUtil.ItemCallback<AbnRepo>() {
     override fun areItemsTheSame(
-        oldItem: RepositoryListResponseElement, newItem: RepositoryListResponseElement
+        oldItem: AbnRepo, newItem: AbnRepo
     ): Boolean = oldItem == newItem
 
     override fun areContentsTheSame(
-        oldItem: RepositoryListResponseElement, newItem: RepositoryListResponseElement
+        oldItem: AbnRepo, newItem: AbnRepo
     ): Boolean = oldItem == newItem
 
 }

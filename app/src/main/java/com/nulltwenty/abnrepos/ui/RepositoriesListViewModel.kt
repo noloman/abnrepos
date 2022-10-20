@@ -3,9 +3,9 @@ package com.nulltwenty.abnrepos.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nulltwenty.abnrepos.domain.RepositoryListUseCase
+import com.nulltwenty.abnrepos.domain.model.AbnRepo
 import com.nulltwenty.abnrepos.domain.model.ResultOf
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.api.model.RepositoryListResponseElement
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,5 +44,5 @@ class RepositoriesListViewModel @Inject constructor(private val repositoryListUs
 data class RepositoryListUiState(
     val loading: Boolean,
     val error: String? = null,
-    val repositoryList: List<RepositoryListResponseElement>? = null
+    val repositoryList: List<AbnRepo>? = null
 )
