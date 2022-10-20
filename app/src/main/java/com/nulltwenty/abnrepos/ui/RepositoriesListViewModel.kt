@@ -1,4 +1,4 @@
-package com.nulltwenty.abnrepos
+package com.nulltwenty.abnrepos.ui
 
 import androidx.lifecycle.ViewModel
 

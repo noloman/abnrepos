@@ -1,7 +1,8 @@
-package com.nulltwenty.abnrepos
+package com.nulltwenty.abnrepos.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.nulltwenty.abnrepos.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
