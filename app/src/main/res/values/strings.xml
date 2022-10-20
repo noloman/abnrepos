@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">abnrepos</string>
     <string name="open_url_button_text">Open URL</string>
-    <string name="repositories_list_fragment_title">ABN Amro repositories</string>
+    <string name="repositories_list_fragment_title">ABN AMRO repositories</string>
 </resources>
