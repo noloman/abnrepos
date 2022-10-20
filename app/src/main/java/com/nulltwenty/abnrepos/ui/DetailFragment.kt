@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -37,5 +38,6 @@ class DetailFragment : Fragment() {
         view.findViewById<Button>(R.id.openRepoUrlButton).setOnClickListener {
             startActivity(Intent(ACTION_VIEW, Uri.parse(abnRepo.htmlUrl)))
         }
+        requireActivity().findViewById<Toolbar>(R.id.toolbar).title = abnRepo.name
     }
 }

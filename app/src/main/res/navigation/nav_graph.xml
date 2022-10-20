@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/repositoriesListFragment"
         android:name="com.nulltwenty.abnrepos.ui.RepositoriesListFragment"
-        android:label="fragment_list"
+        android:label="@string/repositories_list_fragment_title"
         tools:layout="@layout/fragment_list">
         <action
             android:id="@+id/action_repositoriesListFragment_to_detailFragment"
