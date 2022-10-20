@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/repositoriesListFragment"
-        android:name="com.nulltwenty.abnrepos.ui.RepositoriesListFragment"
+        android:name="com.nulltwenty.abnrepos.ui.RepositoryListFragment"
         android:label="@string/repositories_list_fragment_title"
         tools:layout="@layout/fragment_list">
         <action

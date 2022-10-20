@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RepositoriesListFragment : Fragment() {
+class RepositoryListFragment : Fragment() {
     private val viewModel: RepositoriesListViewModel by viewModels()
 
     override fun onCreateView(
