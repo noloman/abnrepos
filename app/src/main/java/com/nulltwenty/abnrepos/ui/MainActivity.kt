@@ -1,15 +1,16 @@
 package com.nulltwenty.abnrepos.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.nulltwenty.abnrepos.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragmentContainerView, RepositoriesListFragment.newInstance())
-            .commit()
+            .add(R.id.fragmentContainerView, RepositoriesListFragment.newInstance()).commit()
     }
 }

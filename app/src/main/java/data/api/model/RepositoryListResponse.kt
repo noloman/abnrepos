@@ -131,7 +131,7 @@ enum class GistsURL {
 }
 
 enum class Login {
-    Abnamrocoesd
+    abnamrocoesd
 }
 
 enum class NodeID {
@@ -147,5 +147,5 @@ enum class Type {
 }
 
 enum class Visibility {
-    Public
+    public
 }

@@ -5,22 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nulltwenty.abnrepos.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RepositoriesListFragment : Fragment() {
 
     companion object {
         fun newInstance() = RepositoriesListFragment()
     }
 
-    private lateinit var viewModel: RepositoriesListViewModel
+    private val viewModel: RepositoriesListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -31,7 +34,8 @@ class RepositoriesListFragment : Fragment() {
             view.findViewById<CircularProgressIndicator>(R.id.loadingProgressIndicator)
         val adapter = RepositoryListAdapter()
         recyclerView.adapter = adapter
-        lifecycleScope.launch {
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 observeAndCollectChanges(loadingProgressIndicator, adapter)
             }
@@ -52,11 +56,5 @@ class RepositoriesListFragment : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[RepositoriesListViewModel::class.java]
-        // TODO: Use the ViewModel
     }
 }

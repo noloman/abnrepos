@@ -4,14 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nulltwenty.abnrepos.domain.RepositoryListUseCase
 import com.nulltwenty.abnrepos.domain.model.ResultOf
+import dagger.hilt.android.lifecycle.HiltViewModel
 import data.api.model.RepositoryListResponseElement
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RepositoriesListViewModel constructor(private val repositoryListUseCase: RepositoryListUseCase) :
+@HiltViewModel
+class RepositoriesListViewModel @Inject constructor(private val repositoryListUseCase: RepositoryListUseCase) :
     ViewModel() {
     private val _uiState = MutableStateFlow(RepositoryListUiState(loading = true))
     val uiState: StateFlow<RepositoryListUiState> = _uiState.asStateFlow()
