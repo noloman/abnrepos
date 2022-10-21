@@ -1,45 +1,21 @@
 package com.nulltwenty.abnrepos.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import com.nulltwenty.abnrepos.data.GithubPagingSource
+import com.nulltwenty.abnrepos.data.GithubPagingSource.Companion.NETWORK_PAGE_SIZE
 import com.nulltwenty.abnrepos.data.di.IoCoroutineDispatcher
-import com.nulltwenty.abnrepos.domain.model.AbnRepo
-import com.nulltwenty.abnrepos.domain.model.ResultOf
-import com.nulltwenty.abnrepos.domain.safeApiCall
-import data.api.model.RepositoryListResponse
-import data.api.model.RepositoryListResponseElement
-import data.api.service.GithubService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import retrofit2.Response
-import java.io.IOException
 import javax.inject.Inject
 
 class RepositoryListRepositoryImpl @Inject constructor(
     @IoCoroutineDispatcher private val ioCoroutineDispatcher: CoroutineDispatcher,
-    private val githubService: GithubService
+    private val githubPagingSource: GithubPagingSource
 ) : RepositoryListRepository {
-    override suspend fun fetchRepositoryList(): ResultOf<List<AbnRepo>> =
-        withContext(ioCoroutineDispatcher) {
-            when (val apiResponse = safeApiCall { requestRepositoryList() }) {
-                is ResultOf.Error -> return@withContext ResultOf.Error(apiResponse.exception)
-                is ResultOf.Success -> return@withContext ResultOf.Success(apiResponse.data.toDomainModel())
-            }
-        }
-
-    private suspend fun requestRepositoryList(): ResultOf<RepositoryListResponse> {
-        val response: Response<RepositoryListResponse> = githubService.fetchRepos("", 1, 10)
-        if (response.isSuccessful) {
-            val body: RepositoryListResponse? = response.body()
-            if (body != null) {
-                return ResultOf.Success(body)
-            }
-        }
-        return ResultOf.Error(IOException("Error fetching repositories ${response.code()} ${response.message()}"))
+    override suspend fun fetchRepositoryList() = withContext(ioCoroutineDispatcher) {
+        Pager(config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = true
+        ), pagingSourceFactory = { githubPagingSource }).flow
     }
 }
-
-private fun RepositoryListResponse.toDomainModel(): List<AbnRepo> = map { repoElement ->
-    repoElement.toDomainModel()
-}
-
-private fun RepositoryListResponseElement.toDomainModel(): AbnRepo =
-    AbnRepo(name, fullName, owner.avatarURL, description, htmlURL, visibility)

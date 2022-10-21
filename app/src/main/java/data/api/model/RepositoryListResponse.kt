@@ -7,15 +7,13 @@ typealias RepositoryListResponse = List<RepositoryListResponseElement>
 
 @JsonClass(generateAdapter = true)
 data class RepositoryListResponseElement(
-    val id: Long? = null,
+    val id: Long,
     val nodeID: String? = null,
     val name: String,
-    @Json(name = "full_name")
-    val fullName: String,
+    @Json(name = "full_name") val fullName: String,
     val private: Boolean,
     val owner: Owner,
-    @Json(name = "html_url")
-    val htmlURL: String,
+    @Json(name = "html_url") val htmlURL: String,
     val description: String? = null,
     val fork: Boolean? = null,
     val url: String? = null,

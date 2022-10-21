@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Keep
 data class AbnRepo(
+    val id: Long,
     val name: String,
     val fullName: String,
     val avatarUrl: String?,

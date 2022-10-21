@@ -1,8 +1,9 @@
 package com.nulltwenty.abnrepos.data.repository
 
+import androidx.paging.PagingData
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
-import com.nulltwenty.abnrepos.domain.model.ResultOf
+import kotlinx.coroutines.flow.Flow
 
 interface RepositoryListRepository {
-    suspend fun fetchRepositoryList(): ResultOf<List<AbnRepo>>
+    suspend fun fetchRepositoryList(): Flow<PagingData<AbnRepo>>
 }
