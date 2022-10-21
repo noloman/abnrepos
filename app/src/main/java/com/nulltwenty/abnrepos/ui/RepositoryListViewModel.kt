@@ -2,29 +2,43 @@ package com.nulltwenty.abnrepos.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.nulltwenty.abnrepos.data.GithubPagingSource
+import com.nulltwenty.abnrepos.domain.GetUserRepositoriesListUseCase
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RepositoriesListViewModel @Inject constructor(private val githubPagingSource: GithubPagingSource) :
+class RepositoriesListViewModel @Inject constructor(private val getUserRepositoriesListUseCase: GetUserRepositoriesListUseCase) :
     ViewModel() {
-    private val _uiState = MutableStateFlow(RepositoryListUiState(loading = true))
+    private val _uiState = MutableStateFlow(RepositoryListUiState())
     val uiState: StateFlow<RepositoryListUiState> = _uiState.asStateFlow()
-    val items: Flow<PagingData<AbnRepo>> = Pager(
-        config = PagingConfig(pageSize = 10),
-        pagingSourceFactory = { githubPagingSource }).flow.cachedIn(viewModelScope)
+
+    init {
+        getRepositoryList()
+    }
+
+    private fun getRepositoryList() = viewModelScope.launch {
+        try {
+            getUserRepositoriesListUseCase.invoke().cachedIn(this).collect { pagingData ->
+                _uiState.update {
+                    it.copy(error = null, repositoryList = pagingData)
+                }
+            }
+        } catch (e: Exception) {
+            _uiState.update {
+                it.copy(error = e.message)
+            }
+        }
+    }
 }
 
 data class RepositoryListUiState(
-    val loading: Boolean, val error: String? = null, val repositoryList: List<AbnRepo>? = null
+    val error: String? = null, val repositoryList: PagingData<AbnRepo>? = null
 )

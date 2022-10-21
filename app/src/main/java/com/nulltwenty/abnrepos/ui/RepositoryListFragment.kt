@@ -12,12 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nulltwenty.abnrepos.R
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -31,43 +31,59 @@ class RepositoryListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.repositoryListRecyclerView)
-        val loadingProgressIndicator =
-            view.findViewById<CircularProgressIndicator>(R.id.loadingProgressIndicator)
         val adapter = RepositoryListAdapter {
             val action: NavDirections =
                 RepositoryListFragmentDirections.actionRepositoriesListFragmentToDetailFragment(it)
             findNavController().navigate(action)
         }
+        addPagingAdapterLoadStateListener(adapter, view)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.items.collectLatest {
-                    adapter.submitData(it)
+                viewModel.uiState.collect {
+                    when {
+                        it.error != null -> hideProgressAndShowErrorDialog(view)
+                        it.repositoryList != null -> adapter.submitData(it.repositoryList)
+                    }
                 }
             }
         }
     }
 
-    private suspend fun observeAndCollectChanges(
-        loadingProgressIndicator: CircularProgressIndicator, adapter: RepositoryListAdapter
+    /**
+     * Adds a listener to the load states of the [adapter] that will help us model the UI state
+     */
+    private fun addPagingAdapterLoadStateListener(
+        adapter: RepositoryListAdapter, view: View
     ) {
-        viewModel.uiState.collect {
-            when {
-                it.loading -> loadingProgressIndicator.visibility = View.VISIBLE
-                it.error != null -> {
-                    loadingProgressIndicator.visibility = View.GONE
-                    AlertDialog.Builder(requireContext()).setMessage("Unexpected error")
-                        .setNegativeButton(getString(android.R.string.ok)) { dialog, _ ->
-                            dialog.dismiss()
-                            requireActivity().finish()
-                        }.show()
+        adapter.addLoadStateListener {
+            when (it.refresh) {
+                is LoadState.Error -> {
+                    hideProgressAndShowErrorDialog(view)
                 }
-                it.repositoryList?.isNotEmpty() == true -> {
-                    loadingProgressIndicator.visibility = View.GONE
-//                    adapter.submitList(it.repositoryList)
+                is LoadState.Loading -> {
+                    view.findViewById<CircularProgressIndicator>(R.id.loadingProgressIndicator).visibility =
+                        View.VISIBLE
+                }
+                !is LoadState.Loading -> {
+                    view.findViewById<CircularProgressIndicator>(R.id.loadingProgressIndicator).visibility =
+                        View.GONE
                 }
             }
         }
+    }
+
+    /**
+     * Hides the CircularProgressIndicator and shows an [AlertDialog] is there's an error
+     */
+    private fun hideProgressAndShowErrorDialog(view: View) {
+        view.findViewById<CircularProgressIndicator>(R.id.loadingProgressIndicator).visibility =
+            View.GONE
+        AlertDialog.Builder(requireContext()).setTitle(getString(R.string.alert_dialog_error_title))
+            .setNegativeButton(getString(android.R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+                requireActivity().finish()
+            }.show()
     }
 }

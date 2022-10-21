@@ -2,4 +2,5 @@
     <string name="app_name">abnrepos</string>
     <string name="open_url_button_text">Open URL</string>
     <string name="repositories_list_fragment_title">ABN AMRO repositories</string>
+    <string name="alert_dialog_error_title">Unexpected error</string>
 </resources>

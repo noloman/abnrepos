@@ -13,7 +13,7 @@ import coil.transform.CircleCropTransformation
 import com.nulltwenty.abnrepos.R
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
 
-class RepositoryListAdapter(val onClickListener: (AbnRepo) -> Unit) :
+class RepositoryListAdapter(private val onClickListener: (AbnRepo) -> Unit) :
     PagingDataAdapter<AbnRepo, RepositoryListAdapter.RepositoryViewHolder>(
         RepositoryDiffCallback
     ) {
@@ -42,9 +42,9 @@ class RepositoryListAdapter(val onClickListener: (AbnRepo) -> Unit) :
     override fun onBindViewHolder(holder: RepositoryViewHolder, position: Int) {
         val abnRepo = getItem(position)
         holder.itemView.setOnClickListener {
-//            if (abnRepo != null) {
-//                onClickListener.invoke(abnRepo)
-//            }
+            if (abnRepo != null) {
+                onClickListener.invoke(abnRepo)
+            }
         }
         if (abnRepo != null) {
             holder.bind(abnRepo)

@@ -3,7 +3,6 @@ package com.nulltwenty.abnrepos.data
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.nulltwenty.abnrepos.data.di.IoCoroutineDispatcher
-import com.nulltwenty.abnrepos.data.repository.toDomainModel
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
 import data.api.model.RepositoryListResponseElement
 import data.api.service.GithubService
@@ -12,7 +11,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
-private const val STARTING_KEY = 0L
+private const val STARTING_KEY = 1L
 
 class GithubPagingSource @Inject constructor(
     @IoCoroutineDispatcher private val coroutineDispatcher: CoroutineDispatcher,
@@ -54,3 +53,6 @@ class GithubPagingSource @Inject constructor(
         const val NETWORK_PAGE_SIZE = 10
     }
 }
+
+private fun RepositoryListResponseElement.toDomainModel(): AbnRepo =
+    AbnRepo(id, name, fullName, owner.avatarURL, description, htmlURL, visibility)

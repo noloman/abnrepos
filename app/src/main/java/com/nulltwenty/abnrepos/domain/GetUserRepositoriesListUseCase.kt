@@ -6,7 +6,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RepositoryListUseCase @Inject constructor(
+class GetUserRepositoriesListUseCase @Inject constructor(
     private val repositoryListRepository: RepositoryListRepository,
     @DefaultCoroutineDispatcher private val coroutineDispatcher: CoroutineDispatcher
 ) {

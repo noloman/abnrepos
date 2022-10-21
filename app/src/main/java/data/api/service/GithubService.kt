@@ -15,7 +15,7 @@ interface GithubService {
     ): Response<RepositoryListResponse>
 
     companion object {
-        const val BASE_URL = "https://api.github.com/users/abnamrocoesd/"
+        const val BASE_URL = "https://api.github.om/users/abnamrocoesd/"
         const val PER_PAGE = 10
     }
 }
