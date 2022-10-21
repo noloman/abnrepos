@@ -5,17 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.nulltwenty.abnrepos.R
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
 
-class RepositoryListAdapter(val onClickListener: (AbnRepo) -> Unit) : ListAdapter<AbnRepo, RepositoryListAdapter.RepositoryViewHolder>(
-    RepositoryDiffCallback
-) {
+class RepositoryListAdapter(val onClickListener: (AbnRepo) -> Unit) :
+    PagingDataAdapter<AbnRepo, RepositoryListAdapter.RepositoryViewHolder>(
+        RepositoryDiffCallback
+    ) {
     inner class RepositoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val repositoryName: TextView = itemView.findViewById(R.id.repositoryName)
         private val repositoryVisibility: TextView =
@@ -40,8 +41,14 @@ class RepositoryListAdapter(val onClickListener: (AbnRepo) -> Unit) : ListAdapte
 
     override fun onBindViewHolder(holder: RepositoryViewHolder, position: Int) {
         val abnRepo = getItem(position)
-        holder.itemView.setOnClickListener { onClickListener.invoke(abnRepo) }
-        holder.bind(abnRepo)
+        holder.itemView.setOnClickListener {
+//            if (abnRepo != null) {
+//                onClickListener.invoke(abnRepo)
+//            }
+        }
+        if (abnRepo != null) {
+            holder.bind(abnRepo)
+        }
     }
 }
 

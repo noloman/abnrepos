@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nulltwenty.abnrepos.R
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -34,14 +35,16 @@ class RepositoryListFragment : Fragment() {
             view.findViewById<CircularProgressIndicator>(R.id.loadingProgressIndicator)
         val adapter = RepositoryListAdapter {
             val action: NavDirections =
-                RepositoriesListFragmentDirections.actionRepositoriesListFragmentToDetailFragment(it)
+                RepositoryListFragmentDirections.actionRepositoriesListFragmentToDetailFragment(it)
             findNavController().navigate(action)
         }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                observeAndCollectChanges(loadingProgressIndicator, adapter)
+                viewModel.items.collectLatest {
+                    adapter.submitData(it)
+                }
             }
         }
     }
@@ -62,7 +65,7 @@ class RepositoryListFragment : Fragment() {
                 }
                 it.repositoryList?.isNotEmpty() == true -> {
                     loadingProgressIndicator.visibility = View.GONE
-                    adapter.submitList(it.repositoryList)
+//                    adapter.submitList(it.repositoryList)
                 }
             }
         }
