@@ -31,7 +31,7 @@ class RepositoriesListViewModel @Inject constructor(private val getUserRepositor
             getUserRepositoriesListUseCase.invoke().cachedIn(this)
                 .collect { pagingData: PagingData<Repo> ->
                     _uiState.update {
-                        it.copy(error = null, repositoryList = pagingData.map { repo: Repo ->
+                        it.copy(error = null, repositoryList = pagingData.map { repo ->
                             return@map repo.toDomainModel()
                         })
                     }
