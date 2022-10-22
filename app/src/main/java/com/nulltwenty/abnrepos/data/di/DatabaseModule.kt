@@ -20,5 +20,5 @@ class DatabaseModule {
         RepositoriesDatabase.getInstance(appContext)
 
     @Provides
-    fun provideRepositoryDao(appDatabase: RepositoriesDatabase): RepositoryDao = appDatabase.reposDao()
+    fun provideRepositoryDao(appDatabase: RepositoriesDatabase): RepositoryDao = appDatabase.repositoriesDao()
 }

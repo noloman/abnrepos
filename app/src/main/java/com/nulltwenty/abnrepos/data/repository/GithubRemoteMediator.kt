@@ -65,7 +65,7 @@ class GithubRemoteMediator(
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
                     repositoriesDatabase.remoteKeysDao().clearRemoteKeys()
-                    repositoriesDatabase.reposDao().clearRepositories()
+                    repositoriesDatabase.repositoriesDao().clearRepositories()
                 }
                 val prevKey = if (page == STARTING_INDEX) null else page.toInt() - 1
                 val nextKey = if (endOfPaginationReached) null else page.toInt() + 1
@@ -73,7 +73,7 @@ class GithubRemoteMediator(
                     RemoteKeys(repoId = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 repositoriesDatabase.remoteKeysDao().insertAll(keys)
-                repositoriesDatabase.reposDao().insertAll(data)
+                repositoriesDatabase.repositoriesDao().insertAll(data)
             }
             return@withContext MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
