@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.nulltwenty.abnrepos.data.db.Repo
-import com.nulltwenty.abnrepos.domain.GetUserRepositoriesListUseCase
+import com.nulltwenty.abnrepos.domain.GetAbnAmroReposUseCase
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RepositoriesListViewModel @Inject constructor(private val getUserRepositoriesListUseCase: GetUserRepositoriesListUseCase) :
+class RepositoriesListViewModel @Inject constructor(private val getAbnAmroReposUseCase: GetAbnAmroReposUseCase) :
     ViewModel() {
     private val _uiState = MutableStateFlow(RepositoryListUiState())
     val uiState: StateFlow<RepositoryListUiState> = _uiState.asStateFlow()
@@ -28,7 +28,7 @@ class RepositoriesListViewModel @Inject constructor(private val getUserRepositor
 
     private fun getRepositoryList() = viewModelScope.launch {
         try {
-            getUserRepositoriesListUseCase.invoke().cachedIn(this)
+            getAbnAmroReposUseCase.invoke().cachedIn(this)
                 .collect { pagingData: PagingData<Repo> ->
                     _uiState.update {
                         it.copy(error = null, repositoryList = pagingData.map { repo ->

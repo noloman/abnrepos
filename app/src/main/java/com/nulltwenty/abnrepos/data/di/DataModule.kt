@@ -2,8 +2,8 @@ package com.nulltwenty.abnrepos.data.di
 
 import com.nulltwenty.abnrepos.data.api.service.GithubService
 import com.nulltwenty.abnrepos.data.db.RepoDatabase
-import com.nulltwenty.abnrepos.data.repository.RepositoryListRepository
-import com.nulltwenty.abnrepos.data.repository.RepositoryListRepositoryImpl
+import com.nulltwenty.abnrepos.data.repository.ReposRepository
+import com.nulltwenty.abnrepos.data.repository.ReposRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +18,6 @@ object DataModule {
         @IoCoroutineDispatcher ioCoroutineDispatcher: CoroutineDispatcher,
         service: GithubService,
         database: RepoDatabase
-    ): RepositoryListRepository =
-        RepositoryListRepositoryImpl(ioCoroutineDispatcher, service, database)
+    ): ReposRepository =
+        ReposRepositoryImpl(ioCoroutineDispatcher, service, database)
 }

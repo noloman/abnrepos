@@ -3,7 +3,6 @@ package com.nulltwenty.abnrepos.data.repository
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.nulltwenty.abnrepos.data.GithubRemoteMediator
 import com.nulltwenty.abnrepos.data.api.service.GithubService
 import com.nulltwenty.abnrepos.data.db.RepoDatabase
 import com.nulltwenty.abnrepos.data.di.IoCoroutineDispatcher
@@ -11,13 +10,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RepositoryListRepositoryImpl @Inject constructor(
+class ReposRepositoryImpl @Inject constructor(
     @IoCoroutineDispatcher private val ioCoroutineDispatcher: CoroutineDispatcher,
     private val service: GithubService,
     private val database: RepoDatabase
-) : RepositoryListRepository {
+) : ReposRepository {
     @OptIn(ExperimentalPagingApi::class)
-    override suspend fun fetchRepositoryList() = withContext(ioCoroutineDispatcher) {
+    override suspend fun fetchRepos() = withContext(ioCoroutineDispatcher) {
         return@withContext Pager(config = PagingConfig(
             pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false
         ),
