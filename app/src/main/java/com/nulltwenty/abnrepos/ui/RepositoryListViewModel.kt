@@ -1,5 +1,6 @@
 package com.nulltwenty.abnrepos.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -27,7 +28,8 @@ class RepositoryListViewModel @Inject constructor(
         getRepositoryList()
     }
 
-    private fun getRepositoryList() = viewModelScope.launch {
+    @VisibleForTesting
+    fun getRepositoryList() = viewModelScope.launch {
         try {
             getAbnAmroRepositoriesUseCase.invoke().cachedIn(this)
                 .collect { pagingData: PagingData<Repository> ->
@@ -49,5 +51,6 @@ data class RepositoryListUiState(
     val error: String? = null, val repositoryList: PagingData<AbnRepo>? = null
 )
 
-private fun Repository.toDomainModel(): AbnRepo =
+@VisibleForTesting
+fun Repository.toDomainModel(): AbnRepo =
     AbnRepo(id, name, fullName, avatarUrl, description, htmlUrl, visibility)
