@@ -86,7 +86,7 @@ class GithubRemoteMediator(
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Repository>): RemoteKeys? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
-        return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { repo ->
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { repo ->
             // Get the remote keys of the last item retrieved
             repositoriesDatabase.remoteKeysDao().remoteKeysRepoId(repo.id)
         }
