@@ -10,7 +10,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.nulltwenty.abnrepos.data.api.service.GithubService
 import com.nulltwenty.abnrepos.data.db.RepositoriesDatabase
 import com.nulltwenty.abnrepos.data.db.Repository
-import com.nulltwenty.abnrepos.data.repository.ReposRepositoryImpl.Companion.NETWORK_PAGE_SIZE
+import com.nulltwenty.abnrepos.data.repository.RepositoriesRepositoryImpl.Companion.NETWORK_PAGE_SIZE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

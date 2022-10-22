@@ -10,13 +10,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class ReposRepositoryImpl @Inject constructor(
+class RepositoriesRepositoryImpl @Inject constructor(
     @IoCoroutineDispatcher private val ioCoroutineDispatcher: CoroutineDispatcher,
     private val service: GithubService,
     private val database: RepositoriesDatabase
-) : ReposRepository {
+) : RepositoriesRepository {
     @OptIn(ExperimentalPagingApi::class)
-    override suspend fun fetchRepos() = withContext(ioCoroutineDispatcher) {
+    override suspend fun fetchRepositories() = withContext(ioCoroutineDispatcher) {
         return@withContext Pager(config = PagingConfig(
             pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false
         ),
