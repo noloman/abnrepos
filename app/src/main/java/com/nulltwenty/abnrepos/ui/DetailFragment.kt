@@ -30,7 +30,7 @@ class DetailFragment : Fragment() {
         view.findViewById<TextView>(R.id.nameTextView).text = abnRepo.name
         view.findViewById<TextView>(R.id.fullNameTextView).text = abnRepo.fullName
         view.findViewById<TextView>(R.id.descriptionTextView).text = abnRepo.description
-        view.findViewById<TextView>(R.id.visibilityTextView).text = abnRepo.visibility.name
+        view.findViewById<TextView>(R.id.visibilityTextView).text = abnRepo.visibility
         view.findViewById<ImageView>(R.id.repositoryOwnerAvatar).load(abnRepo.avatarUrl) {
             crossfade(true)
             transformations(CircleCropTransformation())

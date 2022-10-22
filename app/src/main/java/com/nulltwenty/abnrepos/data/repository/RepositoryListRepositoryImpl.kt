@@ -1,9 +1,11 @@
 package com.nulltwenty.abnrepos.data.repository
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.nulltwenty.abnrepos.data.GithubPagingSource
-import com.nulltwenty.abnrepos.data.GithubPagingSource.Companion.NETWORK_PAGE_SIZE
+import com.nulltwenty.abnrepos.data.GithubRemoteMediator
+import com.nulltwenty.abnrepos.data.api.service.GithubService
+import com.nulltwenty.abnrepos.data.db.RepoDatabase
 import com.nulltwenty.abnrepos.data.di.IoCoroutineDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -11,11 +13,19 @@ import javax.inject.Inject
 
 class RepositoryListRepositoryImpl @Inject constructor(
     @IoCoroutineDispatcher private val ioCoroutineDispatcher: CoroutineDispatcher,
-    private val githubPagingSource: GithubPagingSource
+    private val service: GithubService,
+    private val database: RepoDatabase
 ) : RepositoryListRepository {
+    @OptIn(ExperimentalPagingApi::class)
     override suspend fun fetchRepositoryList() = withContext(ioCoroutineDispatcher) {
-        Pager(config = PagingConfig(
-            pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = true
-        ), pagingSourceFactory = { githubPagingSource }).flow
+        return@withContext Pager(config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false
+        ),
+            remoteMediator = GithubRemoteMediator(ioCoroutineDispatcher, service, database),
+            pagingSourceFactory = { database.reposDao().allRepos() }).flow
+    }
+
+    companion object {
+        const val NETWORK_PAGE_SIZE = 10
     }
 }

@@ -10,5 +10,7 @@ data class Repo(
     val name: String,
     @field:Json(name = "full_name") val fullName: String,
     val description: String?,
-    @field:Json(name = "html_url") val url: String,
+    @field:Json(name = "html_url") val htmlUrl: String,
+    @field:Json(name = "avatar_url") val avatarUrl: String,
+    @field:Json(name = "visibility") val visibility: String,
 )

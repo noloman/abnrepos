@@ -1,14 +1,12 @@
 package com.nulltwenty.abnrepos.data.di
 
-import com.nulltwenty.abnrepos.data.GithubPagingSource
+import com.nulltwenty.abnrepos.data.api.service.GithubService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.nulltwenty.abnrepos.data.api.service.GithubService
-import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -30,10 +28,4 @@ object NetworkModule {
     fun provideOkHttp(): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .build()
-
-    @Provides
-    fun provideGithubPagingSource(
-        @IoCoroutineDispatcher coroutineDispatcher: CoroutineDispatcher,
-        githubService: GithubService
-    ) = GithubPagingSource(coroutineDispatcher, githubService)
 }
