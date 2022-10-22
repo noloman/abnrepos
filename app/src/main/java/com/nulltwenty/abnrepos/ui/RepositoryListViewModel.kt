@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
+import com.nulltwenty.abnrepos.data.db.Repo
 import com.nulltwenty.abnrepos.domain.GetUserRepositoriesListUseCase
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,11 +28,14 @@ class RepositoriesListViewModel @Inject constructor(private val getUserRepositor
 
     private fun getRepositoryList() = viewModelScope.launch {
         try {
-            getUserRepositoriesListUseCase.invoke().cachedIn(this).collect { pagingData ->
-                _uiState.update {
-                    it.copy(error = null, repositoryList = pagingData)
+            getUserRepositoriesListUseCase.invoke().cachedIn(this)
+                .collect { pagingData: PagingData<Repo> ->
+                    _uiState.update {
+                        it.copy(error = null, repositoryList = pagingData.map { repo ->
+                            return@map repo.toDomainModel()
+                        })
+                    }
                 }
-            }
         } catch (e: Exception) {
             _uiState.update {
                 it.copy(error = e.message)
@@ -42,3 +47,6 @@ class RepositoriesListViewModel @Inject constructor(private val getUserRepositor
 data class RepositoryListUiState(
     val error: String? = null, val repositoryList: PagingData<AbnRepo>? = null
 )
+
+private fun Repo.toDomainModel(): AbnRepo =
+    AbnRepo(id, name, fullName, avatarUrl, description, htmlUrl, visibility)

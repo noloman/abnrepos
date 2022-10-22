@@ -25,7 +25,7 @@ class RepositoryListAdapter(private val onClickListener: (AbnRepo) -> Unit) :
 
         fun bind(repo: AbnRepo) {
             repositoryName.text = repo.name
-            repositoryVisibility.text = repo.visibility.name
+            repositoryVisibility.text = repo.visibility
             ownerAvatar.load(repo.avatarUrl) {
                 crossfade(true)
                 transformations(CircleCropTransformation())

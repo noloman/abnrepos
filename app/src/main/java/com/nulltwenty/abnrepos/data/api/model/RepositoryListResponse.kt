@@ -1,4 +1,4 @@
-package data.api.model
+package com.nulltwenty.abnrepos.data.api.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
