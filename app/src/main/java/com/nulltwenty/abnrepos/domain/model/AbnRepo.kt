@@ -2,7 +2,7 @@ package com.nulltwenty.abnrepos.domain.model
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import data.api.model.Visibility
+import com.nulltwenty.abnrepos.data.api.model.Visibility
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

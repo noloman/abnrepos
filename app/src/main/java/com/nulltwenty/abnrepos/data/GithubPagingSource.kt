@@ -2,10 +2,10 @@ package com.nulltwenty.abnrepos.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.nulltwenty.abnrepos.data.api.model.RepositoryListResponseElement
+import com.nulltwenty.abnrepos.data.api.service.GithubService
 import com.nulltwenty.abnrepos.data.di.IoCoroutineDispatcher
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
-import data.api.model.RepositoryListResponseElement
-import data.api.service.GithubService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response
