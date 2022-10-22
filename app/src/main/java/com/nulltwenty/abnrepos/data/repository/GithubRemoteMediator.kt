@@ -1,4 +1,4 @@
-package com.nulltwenty.abnrepos.data
+package com.nulltwenty.abnrepos.data.repository
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
