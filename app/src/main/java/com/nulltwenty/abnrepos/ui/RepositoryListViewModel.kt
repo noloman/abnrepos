@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.nulltwenty.abnrepos.data.db.Repo
+import com.nulltwenty.abnrepos.data.db.Repository
 import com.nulltwenty.abnrepos.domain.GetAbnAmroReposUseCase
 import com.nulltwenty.abnrepos.domain.model.AbnRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +29,7 @@ class RepositoriesListViewModel @Inject constructor(private val getAbnAmroReposU
     private fun getRepositoryList() = viewModelScope.launch {
         try {
             getAbnAmroReposUseCase.invoke().cachedIn(this)
-                .collect { pagingData: PagingData<Repo> ->
+                .collect { pagingData: PagingData<Repository> ->
                     _uiState.update {
                         it.copy(error = null, repositoryList = pagingData.map { repo ->
                             return@map repo.toDomainModel()
@@ -48,5 +48,5 @@ data class RepositoryListUiState(
     val error: String? = null, val repositoryList: PagingData<AbnRepo>? = null
 )
 
-private fun Repo.toDomainModel(): AbnRepo =
+private fun Repository.toDomainModel(): AbnRepo =
     AbnRepo(id, name, fullName, avatarUrl, description, htmlUrl, visibility)

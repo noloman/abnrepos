@@ -10,10 +10,10 @@ import androidx.room.Query
 interface RepoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(repos: List<Repo>)
+    suspend fun insertAll(repositories: List<Repository>)
 
     @Query("SELECT * FROM repos")
-    fun allRepos(): PagingSource<Int, Repo>
+    fun allRepos(): PagingSource<Int, Repository>
 
     @Query("DELETE FROM repos")
     suspend fun clearRepos()

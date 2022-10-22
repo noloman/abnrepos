@@ -8,8 +8,8 @@ import androidx.paging.RemoteMediator
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.nulltwenty.abnrepos.data.api.service.GithubService
-import com.nulltwenty.abnrepos.data.db.Repo
 import com.nulltwenty.abnrepos.data.db.RepoDatabase
+import com.nulltwenty.abnrepos.data.db.Repository
 import com.nulltwenty.abnrepos.data.repository.ReposRepositoryImpl.Companion.NETWORK_PAGE_SIZE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -52,7 +52,7 @@ class GithubRemoteMediatorTest {
     fun whenNetworkServiceReturnsEmptyResults_MediatorResultSuccessEndOfPaginationReachedShouldBeTrue() =
         runTest {
             val sut = GithubRemoteMediator(testDispatcher, fakeGithubService, inMemoryDatabase)
-            val pagingState = PagingState<Int, Repo>(
+            val pagingState = PagingState<Int, Repository>(
                 listOf(), null, PagingConfig(NETWORK_PAGE_SIZE), 10
             )
             val result = sut.load(LoadType.REFRESH, pagingState)

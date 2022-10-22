@@ -8,7 +8,7 @@ import androidx.room.withTransaction
 import com.nulltwenty.abnrepos.data.api.model.RepositoryListResponseElement
 import com.nulltwenty.abnrepos.data.api.service.GithubService
 import com.nulltwenty.abnrepos.data.db.RemoteKeys
-import com.nulltwenty.abnrepos.data.db.Repo
+import com.nulltwenty.abnrepos.data.db.Repository
 import com.nulltwenty.abnrepos.data.db.RepoDatabase
 import com.nulltwenty.abnrepos.data.di.IoCoroutineDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,9 +24,9 @@ class GithubRemoteMediator(
     @IoCoroutineDispatcher private val coroutineDispatcher: CoroutineDispatcher,
     private val service: GithubService,
     private val repoDatabase: RepoDatabase
-) : RemoteMediator<Int, Repo>() {
+) : RemoteMediator<Int, Repository>() {
     override suspend fun load(
-        loadType: LoadType, state: PagingState<Int, Repo>
+        loadType: LoadType, state: PagingState<Int, Repository>
     ): MediatorResult = withContext(coroutineDispatcher) {
         val page = when (loadType) {
             LoadType.REFRESH -> {
@@ -83,7 +83,7 @@ class GithubRemoteMediator(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Repo>): RemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Repository>): RemoteKeys? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
         return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { repo ->
@@ -92,7 +92,7 @@ class GithubRemoteMediator(
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, Repo>): RemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, Repository>): RemoteKeys? {
         // Get the first page that was retrieved, that contained items.
         // From that first page, get the first item
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { repo ->
@@ -102,7 +102,7 @@ class GithubRemoteMediator(
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, Repo>
+        state: PagingState<Int, Repository>
     ): RemoteKeys? {
         // The paging library is trying to load data after the anchor position
         // Get the item closest to the anchor position
@@ -114,5 +114,5 @@ class GithubRemoteMediator(
     }
 }
 
-fun RepositoryListResponseElement.toDataModel(): Repo =
-    Repo(id, name, fullName, description, htmlURL, owner.avatarURL ?: "", visibility.name)
+fun RepositoryListResponseElement.toDataModel(): Repository =
+    Repository(id, name, fullName, description, htmlURL, owner.avatarURL ?: "", visibility.name)

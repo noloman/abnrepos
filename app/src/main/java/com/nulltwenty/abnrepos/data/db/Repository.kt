@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
 @Entity(tableName = "repos")
-data class Repo(
+data class Repository(
     @PrimaryKey val id: Long,
     val name: String,
     @field:Json(name = "full_name") val fullName: String,
