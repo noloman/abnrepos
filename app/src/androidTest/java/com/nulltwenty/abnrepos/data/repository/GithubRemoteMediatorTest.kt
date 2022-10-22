@@ -24,9 +24,11 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doSuspendableAnswer
 import org.mockito.kotlin.mock
 import retrofit2.Response
+import java.io.IOException
 
 @ExperimentalPagingApi
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -80,4 +82,17 @@ class GithubRemoteMediatorTest {
             assertTrue(result is RemoteMediator.MediatorResult.Success)
             assertFalse((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
         }
+
+    @Test
+    fun whenNetworkServiceReturnsAnException_itShouldReturnMediatorResultError() = runTest {
+        fakeGithubService = mock {
+            onBlocking { fetchRepos(any(), any()) } doAnswer { throw IOException() }
+        }
+        val sut = GithubRemoteMediator(testDispatcher, fakeGithubService, inMemoryDatabase)
+        val pagingState = PagingState<Int, Repository>(
+            listOf(), null, PagingConfig(NETWORK_PAGE_SIZE), 10
+        )
+        val result = sut.load(LoadType.REFRESH, pagingState)
+        assertTrue(result is RemoteMediator.MediatorResult.Error)
+    }
 }
