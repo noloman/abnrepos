@@ -59,9 +59,6 @@ class RepositoryListFragment : Fragment() {
     ) {
         adapter.addLoadStateListener {
             when (it.refresh) {
-                is LoadState.Error -> {
-                    hideProgressAndShowErrorDialog(view)
-                }
                 is LoadState.Loading -> {
                     view.findViewById<CircularProgressIndicator>(R.id.loadingProgressIndicator).visibility =
                         View.VISIBLE
