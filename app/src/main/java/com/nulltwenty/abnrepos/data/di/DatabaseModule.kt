@@ -2,7 +2,7 @@ package com.nulltwenty.abnrepos.data.di
 
 import android.content.Context
 import com.nulltwenty.abnrepos.data.db.RepoDao
-import com.nulltwenty.abnrepos.data.db.RepoDatabase
+import com.nulltwenty.abnrepos.data.db.RepositoriesDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,9 +16,9 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): RepoDatabase =
-        RepoDatabase.getInstance(appContext)
+    fun provideAppDatabase(@ApplicationContext appContext: Context): RepositoriesDatabase =
+        RepositoriesDatabase.getInstance(appContext)
 
     @Provides
-    fun provideRepoDao(appDatabase: RepoDatabase): RepoDao = appDatabase.reposDao()
+    fun provideRepoDao(appDatabase: RepositoriesDatabase): RepoDao = appDatabase.reposDao()
 }

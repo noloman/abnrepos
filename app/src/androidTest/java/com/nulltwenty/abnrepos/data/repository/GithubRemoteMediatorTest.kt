@@ -8,7 +8,7 @@ import androidx.paging.RemoteMediator
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.nulltwenty.abnrepos.data.api.service.GithubService
-import com.nulltwenty.abnrepos.data.db.RepoDatabase
+import com.nulltwenty.abnrepos.data.db.RepositoriesDatabase
 import com.nulltwenty.abnrepos.data.db.Repository
 import com.nulltwenty.abnrepos.data.repository.ReposRepositoryImpl.Companion.NETWORK_PAGE_SIZE
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +35,7 @@ class GithubRemoteMediatorTest {
         }
     }
     private val inMemoryDatabase = Room.inMemoryDatabaseBuilder(
-        ApplicationProvider.getApplicationContext(), RepoDatabase::class.java
+        ApplicationProvider.getApplicationContext(), RepositoriesDatabase::class.java
     ).build()
 
     @Before

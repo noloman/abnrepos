@@ -9,7 +9,7 @@ import com.nulltwenty.abnrepos.data.api.model.RepositoryListResponseElement
 import com.nulltwenty.abnrepos.data.api.service.GithubService
 import com.nulltwenty.abnrepos.data.db.RemoteKeys
 import com.nulltwenty.abnrepos.data.db.Repository
-import com.nulltwenty.abnrepos.data.db.RepoDatabase
+import com.nulltwenty.abnrepos.data.db.RepositoriesDatabase
 import com.nulltwenty.abnrepos.data.di.IoCoroutineDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -23,7 +23,7 @@ private const val STARTING_INDEX = 1L
 class GithubRemoteMediator(
     @IoCoroutineDispatcher private val coroutineDispatcher: CoroutineDispatcher,
     private val service: GithubService,
-    private val repoDatabase: RepoDatabase
+    private val repositoriesDatabase: RepositoriesDatabase
 ) : RemoteMediator<Int, Repository>() {
     override suspend fun load(
         loadType: LoadType, state: PagingState<Int, Repository>
@@ -61,19 +61,19 @@ class GithubRemoteMediator(
                 it.toDataModel()
             } ?: emptyList()
             val endOfPaginationReached = data.isEmpty()
-            repoDatabase.withTransaction {
+            repositoriesDatabase.withTransaction {
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
-                    repoDatabase.remoteKeysDao().clearRemoteKeys()
-                    repoDatabase.reposDao().clearRepos()
+                    repositoriesDatabase.remoteKeysDao().clearRemoteKeys()
+                    repositoriesDatabase.reposDao().clearRepos()
                 }
                 val prevKey = if (page == STARTING_INDEX) null else page.toInt() - 1
                 val nextKey = if (endOfPaginationReached) null else page.toInt() + 1
                 val keys = data.map {
                     RemoteKeys(repoId = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
-                repoDatabase.remoteKeysDao().insertAll(keys)
-                repoDatabase.reposDao().insertAll(data)
+                repositoriesDatabase.remoteKeysDao().insertAll(keys)
+                repositoriesDatabase.reposDao().insertAll(data)
             }
             return@withContext MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
@@ -88,7 +88,7 @@ class GithubRemoteMediator(
         // From that last page, get the last item
         return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { repo ->
             // Get the remote keys of the last item retrieved
-            repoDatabase.remoteKeysDao().remoteKeysRepoId(repo.id)
+            repositoriesDatabase.remoteKeysDao().remoteKeysRepoId(repo.id)
         }
     }
 
@@ -97,7 +97,7 @@ class GithubRemoteMediator(
         // From that first page, get the first item
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { repo ->
             // Get the remote keys of the first items retrieved
-            repoDatabase.remoteKeysDao().remoteKeysRepoId(repo.id)
+            repositoriesDatabase.remoteKeysDao().remoteKeysRepoId(repo.id)
         }
     }
 
@@ -108,7 +108,7 @@ class GithubRemoteMediator(
         // Get the item closest to the anchor position
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { repoId ->
-                repoDatabase.remoteKeysDao().remoteKeysRepoId(repoId)
+                repositoriesDatabase.remoteKeysDao().remoteKeysRepoId(repoId)
             }
         }
     }
