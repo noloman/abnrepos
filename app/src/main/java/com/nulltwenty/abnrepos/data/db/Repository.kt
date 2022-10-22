@@ -2,15 +2,14 @@ package com.nulltwenty.abnrepos.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.squareup.moshi.Json
 
-@Entity(tableName = "repos")
+@Entity(tableName = "repositories")
 data class Repository(
     @PrimaryKey val id: Long,
     val name: String,
-    @field:Json(name = "full_name") val fullName: String,
+    val fullName: String,
     val description: String?,
-    @field:Json(name = "html_url") val htmlUrl: String,
-    @field:Json(name = "avatar_url") val avatarUrl: String,
-    @field:Json(name = "visibility") val visibility: String,
+    val htmlUrl: String,
+    val avatarUrl: String,
+    val visibility: String,
 )

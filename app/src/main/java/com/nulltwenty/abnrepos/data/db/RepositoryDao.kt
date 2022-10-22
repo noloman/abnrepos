@@ -7,14 +7,13 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface RepoDao {
-
+interface RepositoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(repositories: List<Repository>)
 
-    @Query("SELECT * FROM repos")
-    fun allRepos(): PagingSource<Int, Repository>
+    @Query("SELECT * FROM repositories")
+    fun allRepositories(): PagingSource<Int, Repository>
 
-    @Query("DELETE FROM repos")
-    suspend fun clearRepos()
+    @Query("DELETE FROM repositories")
+    suspend fun clearRepositories()
 }

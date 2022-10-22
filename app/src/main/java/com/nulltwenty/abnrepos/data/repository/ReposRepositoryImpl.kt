@@ -21,7 +21,7 @@ class ReposRepositoryImpl @Inject constructor(
             pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false
         ),
             remoteMediator = GithubRemoteMediator(ioCoroutineDispatcher, service, database),
-            pagingSourceFactory = { database.reposDao().allRepos() }).flow
+            pagingSourceFactory = { database.reposDao().allRepositories() }).flow
     }
 
     companion object {

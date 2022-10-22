@@ -8,8 +8,8 @@ import androidx.room.withTransaction
 import com.nulltwenty.abnrepos.data.api.model.RepositoryListResponseElement
 import com.nulltwenty.abnrepos.data.api.service.GithubService
 import com.nulltwenty.abnrepos.data.db.RemoteKeys
-import com.nulltwenty.abnrepos.data.db.Repository
 import com.nulltwenty.abnrepos.data.db.RepositoriesDatabase
+import com.nulltwenty.abnrepos.data.db.Repository
 import com.nulltwenty.abnrepos.data.di.IoCoroutineDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -65,7 +65,7 @@ class GithubRemoteMediator(
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
                     repositoriesDatabase.remoteKeysDao().clearRemoteKeys()
-                    repositoriesDatabase.reposDao().clearRepos()
+                    repositoriesDatabase.reposDao().clearRepositories()
                 }
                 val prevKey = if (page == STARTING_INDEX) null else page.toInt() - 1
                 val nextKey = if (endOfPaginationReached) null else page.toInt() + 1

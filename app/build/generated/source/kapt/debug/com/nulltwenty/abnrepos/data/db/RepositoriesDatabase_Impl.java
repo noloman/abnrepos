@@ -4,13 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.room.DatabaseConfiguration;
 import androidx.room.InvalidationTracker;
 import androidx.room.RoomOpenHelper;
+import androidx.room.RoomOpenHelper.Delegate;
+import androidx.room.RoomOpenHelper.ValidationResult;
 import androidx.room.migration.AutoMigrationSpec;
 import androidx.room.migration.Migration;
 import androidx.room.util.DBUtil;
 import androidx.room.util.TableInfo;
+import androidx.room.util.TableInfo.Column;
+import androidx.room.util.TableInfo.ForeignKey;
+import androidx.room.util.TableInfo.Index;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
-
+import androidx.sqlite.db.SupportSQLiteOpenHelper.Callback;
+import androidx.sqlite.db.SupportSQLiteOpenHelper.Configuration;
 import java.lang.Class;
 import java.lang.Override;
 import java.lang.String;
@@ -24,7 +30,7 @@ import java.util.Set;
 
 @SuppressWarnings({"unchecked", "deprecation"})
 public final class RepositoriesDatabase_Impl extends RepositoriesDatabase {
-  private volatile RepoDao _repoDao;
+  private volatile RepositoryDao _repositoryDao;
 
   private volatile RemoteKeysDao _remoteKeysDao;
 
@@ -33,15 +39,15 @@ public final class RepositoriesDatabase_Impl extends RepositoriesDatabase {
     final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(1) {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
-        _db.execSQL("CREATE TABLE IF NOT EXISTS `repos` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `fullName` TEXT NOT NULL, `description` TEXT, `htmlUrl` TEXT NOT NULL, `avatarUrl` TEXT NOT NULL, `visibility` TEXT NOT NULL, PRIMARY KEY(`id`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `repositories` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `fullName` TEXT NOT NULL, `description` TEXT, `htmlUrl` TEXT NOT NULL, `avatarUrl` TEXT NOT NULL, `visibility` TEXT NOT NULL, PRIMARY KEY(`id`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS `remote_keys` (`repoId` INTEGER NOT NULL, `prevKey` INTEGER, `nextKey` INTEGER, PRIMARY KEY(`repoId`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '968a89840c5b52054981a5e06cd53a94')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '14d0a56d7f82bc3cc7ba1eaf6c4ece69')");
       }
 
       @Override
       public void dropAllTables(SupportSQLiteDatabase _db) {
-        _db.execSQL("DROP TABLE IF EXISTS `repos`");
+        _db.execSQL("DROP TABLE IF EXISTS `repositories`");
         _db.execSQL("DROP TABLE IF EXISTS `remote_keys`");
         if (mCallbacks != null) {
           for (int _i = 0, _size = mCallbacks.size(); _i < _size; _i++) {
@@ -81,22 +87,22 @@ public final class RepositoriesDatabase_Impl extends RepositoriesDatabase {
 
       @Override
       public RoomOpenHelper.ValidationResult onValidateSchema(SupportSQLiteDatabase _db) {
-        final HashMap<String, TableInfo.Column> _columnsRepos = new HashMap<String, TableInfo.Column>(7);
-        _columnsRepos.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsRepos.put("name", new TableInfo.Column("name", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsRepos.put("fullName", new TableInfo.Column("fullName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsRepos.put("description", new TableInfo.Column("description", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsRepos.put("htmlUrl", new TableInfo.Column("htmlUrl", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsRepos.put("avatarUrl", new TableInfo.Column("avatarUrl", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsRepos.put("visibility", new TableInfo.Column("visibility", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        final HashSet<TableInfo.ForeignKey> _foreignKeysRepos = new HashSet<TableInfo.ForeignKey>(0);
-        final HashSet<TableInfo.Index> _indicesRepos = new HashSet<TableInfo.Index>(0);
-        final TableInfo _infoRepos = new TableInfo("repos", _columnsRepos, _foreignKeysRepos, _indicesRepos);
-        final TableInfo _existingRepos = TableInfo.read(_db, "repos");
-        if (! _infoRepos.equals(_existingRepos)) {
-          return new RoomOpenHelper.ValidationResult(false, "repos(com.nulltwenty.abnrepos.data.db.Repo).\n"
-                  + " Expected:\n" + _infoRepos + "\n"
-                  + " Found:\n" + _existingRepos);
+        final HashMap<String, TableInfo.Column> _columnsRepositories = new HashMap<String, TableInfo.Column>(7);
+        _columnsRepositories.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRepositories.put("name", new TableInfo.Column("name", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRepositories.put("fullName", new TableInfo.Column("fullName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRepositories.put("description", new TableInfo.Column("description", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRepositories.put("htmlUrl", new TableInfo.Column("htmlUrl", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRepositories.put("avatarUrl", new TableInfo.Column("avatarUrl", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRepositories.put("visibility", new TableInfo.Column("visibility", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysRepositories = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesRepositories = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoRepositories = new TableInfo("repositories", _columnsRepositories, _foreignKeysRepositories, _indicesRepositories);
+        final TableInfo _existingRepositories = TableInfo.read(_db, "repositories");
+        if (! _infoRepositories.equals(_existingRepositories)) {
+          return new RoomOpenHelper.ValidationResult(false, "repositories(com.nulltwenty.abnrepos.data.db.Repository).\n"
+                  + " Expected:\n" + _infoRepositories + "\n"
+                  + " Found:\n" + _existingRepositories);
         }
         final HashMap<String, TableInfo.Column> _columnsRemoteKeys = new HashMap<String, TableInfo.Column>(3);
         _columnsRemoteKeys.put("repoId", new TableInfo.Column("repoId", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
@@ -113,7 +119,7 @@ public final class RepositoriesDatabase_Impl extends RepositoriesDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "968a89840c5b52054981a5e06cd53a94", "b3946fbede2bd38c8fc221515e018598");
+    }, "14d0a56d7f82bc3cc7ba1eaf6c4ece69", "791eb14778844d0fc6e653275a6fe8c9");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)
@@ -126,7 +132,7 @@ public final class RepositoriesDatabase_Impl extends RepositoriesDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "repos","remote_keys");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "repositories","remote_keys");
   }
 
   @Override
@@ -135,7 +141,7 @@ public final class RepositoriesDatabase_Impl extends RepositoriesDatabase {
     final SupportSQLiteDatabase _db = super.getOpenHelper().getWritableDatabase();
     try {
       super.beginTransaction();
-      _db.execSQL("DELETE FROM `repos`");
+      _db.execSQL("DELETE FROM `repositories`");
       _db.execSQL("DELETE FROM `remote_keys`");
       super.setTransactionSuccessful();
     } finally {
@@ -150,7 +156,7 @@ public final class RepositoriesDatabase_Impl extends RepositoriesDatabase {
   @Override
   protected Map<Class<?>, List<Class<?>>> getRequiredTypeConverters() {
     final HashMap<Class<?>, List<Class<?>>> _typeConvertersMap = new HashMap<Class<?>, List<Class<?>>>();
-    _typeConvertersMap.put(RepoDao.class, RepoDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(RepositoryDao.class, RepositoryDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(RemoteKeysDao.class, RemoteKeysDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
@@ -168,15 +174,15 @@ public final class RepositoriesDatabase_Impl extends RepositoriesDatabase {
   }
 
   @Override
-  public RepoDao reposDao() {
-    if (_repoDao != null) {
-      return _repoDao;
+  public RepositoryDao reposDao() {
+    if (_repositoryDao != null) {
+      return _repositoryDao;
     } else {
       synchronized(this) {
-        if(_repoDao == null) {
-          _repoDao = new RepoDao_Impl(this);
+        if(_repositoryDao == null) {
+          _repositoryDao = new RepositoryDao_Impl(this);
         }
-        return _repoDao;
+        return _repositoryDao;
       }
     }
   }

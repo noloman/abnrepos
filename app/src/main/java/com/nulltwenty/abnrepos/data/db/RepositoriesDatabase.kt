@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase
     entities = [Repository::class, RemoteKeys::class], version = 1, exportSchema = false
 )
 abstract class RepositoriesDatabase : RoomDatabase() {
-    abstract fun reposDao(): RepoDao
+    abstract fun reposDao(): RepositoryDao
     abstract fun remoteKeysDao(): RemoteKeysDao
 
     companion object {
