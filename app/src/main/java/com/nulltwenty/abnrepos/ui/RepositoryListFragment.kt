@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RepositoryListFragment : Fragment() {
-    private val viewModel: RepositoriesListViewModel by viewModels()
+    private val viewModel: RepositoryListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
