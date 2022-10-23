@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RepositoryListFragment : Fragment() {
     private val viewModel: RepositoryListViewModel by viewModels()
+    private val networkMonitorViewModel: NetworkMonitorViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -39,14 +40,28 @@ class RepositoryListFragment : Fragment() {
         addPagingAdapterLoadStateListener(adapter, view)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        networkMonitorViewModel.connectionLiveData.observe(viewLifecycleOwner) { networkAvailable ->
+            if (networkAvailable) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.getRepositoryList()
+                    collectionFromViewModelUiState(view, adapter)
+                }
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                    when {
-                        it.error != null -> hideProgressAndShowErrorDialog(view)
-                        it.repositoryList != null -> adapter.submitData(it.repositoryList)
-                    }
-                }
+                collectionFromViewModelUiState(view, adapter)
+            }
+        }
+    }
+
+    private suspend fun collectionFromViewModelUiState(
+        view: View, adapter: RepositoryListAdapter
+    ) {
+        viewModel.uiState.collect {
+            when {
+                it.error != null -> hideProgressAndShowErrorDialog(view)
+                it.repositoryList != null -> adapter.submitData(it.repositoryList)
             }
         }
     }
