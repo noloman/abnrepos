@@ -1,14 +1,11 @@
 package com.nulltwenty.abnrepos.data.di
 
-import android.content.Context
-import android.net.ConnectivityManager
 import com.nulltwenty.abnrepos.data.api.service.GithubService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -31,8 +28,4 @@ object NetworkModule {
     fun provideOkHttp(): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .build()
-
-    @Provides
-    fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 }

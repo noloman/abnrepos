@@ -27,6 +27,12 @@ android {
                               "room.expandProjection": "true"]
             }
         }
+        packagingOptions {
+            resources.excludes.add("META-INF/*")
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
     }
 
     buildTypes {
@@ -92,8 +98,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
     androidTestImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
-    implementation 'org.mockito:mockito-android:4.8.1'
-    testImplementation 'org.mockito:mockito-android:4.8.1'
+    testImplementation "io.mockk:mockk-android:1.13.2"
+    androidTestImplementation "io.mockk:mockk-android:1.13.2"
+    testImplementation "io.mockk:mockk-agent:1.13.2"
+    androidTestImplementation "io.mockk:mockk-agent:1.13.2"
     testImplementation 'org.mockito:mockito-core:4.8.1'
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'

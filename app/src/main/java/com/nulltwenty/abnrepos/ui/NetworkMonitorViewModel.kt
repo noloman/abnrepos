@@ -4,6 +4,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,7 +23,8 @@ import javax.net.SocketFactory
 @HiltViewModel
 class NetworkMonitorViewModel @Inject constructor(
     private val connectivityManager: ConnectivityManager,
-    @IoCoroutineDispatcher private val coroutineDispatcher: CoroutineDispatcher
+    @IoCoroutineDispatcher private val coroutineDispatcher: CoroutineDispatcher,
+    private val networkRequest: NetworkRequest
 ) : ViewModel() {
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private val validNetworks: MutableSet<Network> = HashSet()
@@ -37,11 +39,9 @@ class NetworkMonitorViewModel @Inject constructor(
         startMonitoringNetworkStatus()
     }
 
-    private fun startMonitoringNetworkStatus() {
+    @VisibleForTesting
+    fun startMonitoringNetworkStatus() {
         networkCallback = createNetworkCallback()
-        val networkRequest =
-            NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                .build()
         connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
     }
 
