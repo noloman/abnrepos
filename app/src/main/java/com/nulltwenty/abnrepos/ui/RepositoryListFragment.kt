@@ -42,10 +42,7 @@ class RepositoryListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         networkMonitorViewModel.connectionLiveData.observe(viewLifecycleOwner) { networkAvailable ->
             if (networkAvailable) {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.getRepositoryList()
-                    collectionFromViewModelUiState(view, adapter)
-                }
+                adapter.refresh()
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
