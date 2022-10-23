@@ -14,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object UiModule {
     @Provides
-    fun provideNetworkRequest() = NetworkRequest.Builder().addCapability(
+    fun provideNetworkRequest(): NetworkRequest = NetworkRequest.Builder().addCapability(
         NetworkCapabilities.NET_CAPABILITY_INTERNET
     ).build()
 
