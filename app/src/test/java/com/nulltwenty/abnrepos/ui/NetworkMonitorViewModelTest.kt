@@ -21,17 +21,35 @@ class NetworkMonitorViewModelTest {
     private val testDispatcher = UnconfinedTestDispatcher()
     private lateinit var sut: NetworkMonitorViewModel
     private val mockedNetworkRequest: NetworkRequest = mockk()
-    private val mockedNetworkCapabilities: NetworkCapabilities = mockk {
-        coEvery { hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) } returns true
-    }
-    private val mockedNetworkConnectivityManager: ConnectivityManager = mockk(relaxed = true) {
-        coEvery { getNetworkCapabilities(any()) } returns mockedNetworkCapabilities
-        coEvery { registerNetworkCallback(any(), any(), any()) } coAnswers {}
+    private lateinit var mockedNetworkCapabilities: NetworkCapabilities
+    private lateinit var mockedNetworkConnectivityManager: ConnectivityManager
+
+    private fun initNetwork(connectionAvailable: Boolean) {
+        mockedNetworkCapabilities = mockk {
+            coEvery { hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) } returns connectionAvailable
+        }
+        mockedNetworkConnectivityManager = mockk(relaxed = true) {
+            coEvery { getNetworkCapabilities(any()) } returns mockedNetworkCapabilities
+            coEvery { registerNetworkCallback(any(), any(), any()) } coAnswers {}
+        }
     }
 
     @Test
     fun `given ConnectivityManager and NetworkRequest with Internet when observing the connection LiveData it should emit true`() =
         runTest {
+            initNetwork(true)
+            sut = NetworkMonitorViewModel(
+                mockedNetworkConnectivityManager, testDispatcher, mockedNetworkRequest
+            )
+            sut.connectionLiveData.observeForever { networkAvailable ->
+                assertTrue(networkAvailable)
+            }
+        }
+
+    @Test
+    fun `given ConnectivityManager and NetworkRequest without Internet when observing the connection LiveData it should emit false`() =
+        runTest {
+            initNetwork(false)
             sut = NetworkMonitorViewModel(
                 mockedNetworkConnectivityManager, testDispatcher, mockedNetworkRequest
             )
