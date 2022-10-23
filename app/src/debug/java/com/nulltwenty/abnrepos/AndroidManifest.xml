@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nulltwenty.abnrepos">
+
+    <application>
+        <activity
+            android:name=".HiltActivityForTest"
+            android:exported="false" />
+    </application>
+</manifest>

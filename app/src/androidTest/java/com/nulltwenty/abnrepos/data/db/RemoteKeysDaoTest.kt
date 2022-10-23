@@ -3,7 +3,7 @@ package com.nulltwenty.abnrepos.data.db
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.nulltwenty.abnrepos.fakeRepository
+import com.nulltwenty.abnrepos.getFakeRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -33,6 +33,7 @@ class RemoteKeyDaoTest {
         val remoteKeys = listOf(remoteKey)
         remoteKeyDao.insertAll(remoteKeys)
 
+        val fakeRepository = getFakeRepository()
         val loadedRemoteKeys = remoteKeyDao.remoteKeysRepoId(fakeRepository.id)
 
         assertNotNull(loadedRemoteKeys)
@@ -49,7 +50,7 @@ class RemoteKeyDaoTest {
 
         remoteKeyDao.clearRemoteKeys()
 
-        val loadedRemoteKeys = remoteKeyDao.remoteKeysRepoId(fakeRepository.id)
+        val loadedRemoteKeys = remoteKeyDao.remoteKeysRepoId(getFakeRepository().id)
         assertNull(loadedRemoteKeys)
     }
 }

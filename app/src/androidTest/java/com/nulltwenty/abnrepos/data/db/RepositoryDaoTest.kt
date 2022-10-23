@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.paging.PagingSource
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.nulltwenty.abnrepos.fakeRepository
+import com.nulltwenty.abnrepos.getFakeRepositoryList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertNotNull
@@ -28,8 +28,7 @@ class RepositoryDaoTest {
 
     @Test
     fun givenAListOfRepositories_whenInsertingThemIntoDatabase_itShouldRetrieveThem() = runTest {
-        val repositoryList = listOf(fakeRepository)
-        repositoryDao.insertAll(repositoryList)
+        repositoryDao.insertAll(getFakeRepositoryList(1))
 
         val allRepositories: PagingSource<Int, Repository> = repositoryDao.allRepositories()
 
