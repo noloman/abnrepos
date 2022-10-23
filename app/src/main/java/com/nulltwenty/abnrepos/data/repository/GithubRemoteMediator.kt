@@ -80,6 +80,8 @@ class GithubRemoteMediator(
             return@withContext MediatorResult.Error(exception)
         } catch (exception: HttpException) {
             return@withContext MediatorResult.Error(exception)
+        } catch (exception: Exception) {
+            return@withContext MediatorResult.Error(exception)
         }
     }
 
