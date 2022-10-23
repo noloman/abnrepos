@@ -46,7 +46,7 @@ class RepositoryListFragmentTest {
     }
 
     @Test
-    fun givenAListOfRepositories_whenTheFragmentIsLaunched_itShouldShowTheProperDataIntheList() {
+    fun givenAListOfRepositories_whenTheFragmentIsLaunched_itShouldShowTheProperDataInTheList() {
         with(onView(withId(com.nulltwenty.abnrepos.R.id.repositoryListRecyclerView))) {
             check(matches(hasDescendant(withText("fakeName0"))))
             check(matches(hasDescendant(withText("fakeName1"))))
