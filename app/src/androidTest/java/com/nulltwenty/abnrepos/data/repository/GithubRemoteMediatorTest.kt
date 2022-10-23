@@ -41,7 +41,7 @@ class GithubRemoteMediatorTest {
 
     private fun initDependencies(response: Response<List<RepositoryListResponseElement>>) {
         fakeGithubService = mock {
-            onBlocking { fetchRepos(any(), any()) } doSuspendableAnswer {
+            onBlocking { fetchRepos(any()) } doSuspendableAnswer {
                 response
             }
         }
@@ -86,7 +86,7 @@ class GithubRemoteMediatorTest {
     @Test
     fun whenNetworkServiceReturnsAnException_itShouldReturnMediatorResultError() = runTest {
         fakeGithubService = mock {
-            onBlocking { fetchRepos(any(), any()) } doAnswer { throw IOException() }
+            onBlocking { fetchRepos(any()) } doAnswer { throw IOException() }
         }
         val sut = GithubRemoteMediator(testDispatcher, fakeGithubService, inMemoryDatabase)
         val pagingState = PagingState<Int, Repository>(
