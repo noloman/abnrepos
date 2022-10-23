@@ -57,10 +57,10 @@ class GithubRemoteMediator(
         try {
             val response: Response<List<RepositoryListResponseElement>> =
                 service.fetchRepos(page = page.toInt())
-            val data = response.body()?.map {
+            val repositoryList: List<Repository> = response.body()?.map {
                 it.toDataModel()
             } ?: emptyList()
-            val endOfPaginationReached = data.isEmpty()
+            val endOfPaginationReached = repositoryList.isEmpty()
             repositoriesDatabase.withTransaction {
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
@@ -69,16 +69,18 @@ class GithubRemoteMediator(
                 }
                 val prevKey = if (page == STARTING_INDEX) null else page.toInt() - 1
                 val nextKey = if (endOfPaginationReached) null else page.toInt() + 1
-                val keys = data.map {
+                val keys = repositoryList.map {
                     RemoteKeys(repoId = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 repositoriesDatabase.remoteKeysDao().insertAll(keys)
-                repositoriesDatabase.repositoriesDao().insertAll(data)
+                repositoriesDatabase.repositoriesDao().insertAll(repositoryList)
             }
             return@withContext MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
             return@withContext MediatorResult.Error(exception)
         } catch (exception: HttpException) {
+            return@withContext MediatorResult.Error(exception)
+        } catch (exception: Exception) {
             return@withContext MediatorResult.Error(exception)
         }
     }

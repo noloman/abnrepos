@@ -13,6 +13,8 @@ import com.nulltwenty.abnrepos.data.db.RepositoriesDatabase
 import com.nulltwenty.abnrepos.data.db.Repository
 import com.nulltwenty.abnrepos.data.repository.RepositoriesRepositoryImpl.Companion.NETWORK_PAGE_SIZE
 import com.nulltwenty.abnrepos.fakeRepositoryListResponseElement
+import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -23,10 +25,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.doSuspendableAnswer
-import org.mockito.kotlin.mock
 import retrofit2.Response
 import java.io.IOException
 
@@ -40,10 +38,8 @@ class GithubRemoteMediatorTest {
     ).build()
 
     private fun initDependencies(response: Response<List<RepositoryListResponseElement>>) {
-        fakeGithubService = mock {
-            onBlocking { fetchRepos(any(), any()) } doSuspendableAnswer {
-                response
-            }
+        fakeGithubService = mockk {
+            coEvery { fetchRepos(any()) } returns response
         }
     }
 
@@ -85,9 +81,10 @@ class GithubRemoteMediatorTest {
 
     @Test
     fun whenNetworkServiceReturnsAnException_itShouldReturnMediatorResultError() = runTest {
-        fakeGithubService = mock {
-            onBlocking { fetchRepos(any(), any()) } doAnswer { throw IOException() }
+        fakeGithubService = mockk {
+            coEvery { fetchRepos(any()) } throws IOException()
         }
+
         val sut = GithubRemoteMediator(testDispatcher, fakeGithubService, inMemoryDatabase)
         val pagingState = PagingState<Int, Repository>(
             listOf(), null, PagingConfig(NETWORK_PAGE_SIZE), 10

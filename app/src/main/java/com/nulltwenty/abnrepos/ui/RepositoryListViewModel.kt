@@ -28,7 +28,6 @@ class RepositoryListViewModel @Inject constructor(
         getRepositoryList()
     }
 
-    @VisibleForTesting
     fun getRepositoryList() = viewModelScope.launch {
         try {
             getAbnAmroRepositoriesUseCase.invoke().cachedIn(this)
