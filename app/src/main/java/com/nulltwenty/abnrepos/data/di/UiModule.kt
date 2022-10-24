@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ru.beryukhov.reactivenetwork.ReactiveNetwork
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,4 +23,7 @@ object UiModule {
     @Provides
     fun provideConnectivityManager(@ApplicationContext context: Context) =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    @Provides
+    fun provideReactiveNetwork(): ReactiveNetwork = ReactiveNetwork()
 }

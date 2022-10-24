@@ -19,12 +19,15 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nulltwenty.abnrepos.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import ru.beryukhov.reactivenetwork.ReactiveNetwork
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RepositoryListFragment : Fragment() {
     private val viewModel: RepositoryListViewModel by viewModels()
-    private val networkMonitorViewModel: NetworkMonitorViewModel by viewModels()
 
+    @Inject
+    lateinit var reactiveNetwork: ReactiveNetwork
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_list, container, false)
@@ -40,21 +43,28 @@ class RepositoryListFragment : Fragment() {
         addPagingAdapterLoadStateListener(adapter, view)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        networkMonitorViewModel.connectionLiveData.observe(viewLifecycleOwner) { networkAvailable ->
-            if (networkAvailable) {
-                adapter.refresh()
-            }
-        }
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                observeNetworkConnectivity(view, adapter)
                 collectionFromViewModelUiState(view, adapter)
             }
         }
     }
 
-    private suspend fun collectionFromViewModelUiState(
-        view: View, adapter: RepositoryListAdapter
-    ) {
+    private suspend fun observeNetworkConnectivity(view: View, adapter: RepositoryListAdapter) {
+        reactiveNetwork.observeNetworkConnectivity(requireContext()).collect { connectivity ->
+            if (connectivity.available) {
+                fetchAndCollectData(view, adapter)
+            }
+        }
+    }
+
+    private suspend fun fetchAndCollectData(view: View, adapter: RepositoryListAdapter) {
+        viewModel.getRepositoryList()
+        collectionFromViewModelUiState(view, adapter)
+    }
+
+    private suspend fun collectionFromViewModelUiState(view: View, adapter: RepositoryListAdapter) {
         viewModel.uiState.collect {
             when {
                 it.error != null -> hideProgressAndShowErrorDialog(view)
