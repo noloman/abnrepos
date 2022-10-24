@@ -47,23 +47,39 @@ class RepositoryListFragmentTest {
 
     @Test
     fun givenAListOfRepositories_whenTheFragmentIsLaunched_itShouldShowTheProperDataInTheList() {
-        with(onView(withId(com.nulltwenty.abnrepos.R.id.repositoryListRecyclerView))) {
-            check(matches(hasDescendant(withText("fakeName0"))))
-            check(matches(hasDescendant(withText("fakeName1"))))
-            check(matches(hasDescendant(withText("fakeName2"))))
-            check(matches(not(hasDescendant(withText("fakeFullName0")))))
-            check(matches(not(hasDescendant(withText("fakeFullName1")))))
-            check(matches(not(hasDescendant(withText("fakeFullName2")))))
-            check(matches(not(hasDescendant(withText("fakeDescription0")))))
-            check(matches(not(hasDescendant(withText("fakeDescription1")))))
-            check(matches(not(hasDescendant(withText("fakeDescription2")))))
-            check(matches(not(hasDescendant(withText("fakeHtmlUrl0")))))
-            check(matches(not(hasDescendant(withText("fakeHtmlUrl1")))))
-            check(matches(not(hasDescendant(withText("fakeHtmlUrl2")))))
-            check(matches(hasDescendant(withText("fakeVisibility0"))))
-            check(matches(hasDescendant(withText("fakeVisibility1"))))
-            check(matches(hasDescendant(withText("fakeVisibility2"))))
-        }
+        checkPresenceOf("fakeName0")
+        checkPresenceOf("fakeName1")
+        checkPresenceOf("fakeName2")
+        checkAbsenceOf("fakeFullName0")
+        checkAbsenceOf("fakeFullName1")
+        checkAbsenceOf("fakeFullName2")
+        checkAbsenceOf("fakeDescription0")
+        checkAbsenceOf("fakeDescription1")
+        checkAbsenceOf("fakeDescription2")
+        checkAbsenceOf("fakeHtmlUrl0")
+        checkAbsenceOf("fakeHtmlUrl1")
+        checkAbsenceOf("fakeHtmlUrl2")
+        checkPresenceOf("fakeVisibility0")
+        checkPresenceOf("fakeVisibility1")
+        checkPresenceOf("fakeVisibility2")
+    }
+
+    private fun checkPresenceOf(text: String) {
+        onView(withId(com.nulltwenty.abnrepos.R.id.repositoryListRecyclerView)).check(
+            matches(
+                hasDescendant(withText(text))
+            )
+        )
+    }
+
+    private fun checkAbsenceOf(text: String) {
+        onView(withId(com.nulltwenty.abnrepos.R.id.repositoryListRecyclerView)).check(
+            matches(
+                not(
+                    hasDescendant(withText(text))
+                )
+            )
+        )
     }
 
     @Module
