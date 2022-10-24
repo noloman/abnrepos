@@ -26,3 +26,11 @@ The instrumented part exists because the app makes heavy use of the Room persist
 The same is true for the [GithubRemoteMediator](https://github.com/noloman/abnrepos/blob/main/app/src/main/java/com/nulltwenty/abnrepos/data/repository/GithubRemoteMediator.kt): as this coordinates the data loading process and distinguishes between the local and the remote data source, it also needs a database object, so it was indeed necessary to create instrumented tests.
 I have also created some UI tests using Espresso, just to test the proper UI in the adapter rows. This is a very basic test, but I have decided not to focus on the UI testing and I have included it also to show the way to use Espresso+Hilt, which is not trivial.
 Although it has been tested, I could not test the [RepositoriesRepository](https://github.com/noloman/abnrepos/blob/main/app/src/main/java/com/nulltwenty/abnrepos/data/repository/RepositoriesRepositoryImpl.kt) because the [PagingData](https://developer.android.com/reference/kotlin/androidx/paging/PagingData) is object that wraps the data that will be showed to the users (the repository list) and it doesn't expose its contents so easily (or at least I couldn't find a way to do it).
+
+### Known limitations
+Sometimes the Github API complains that the limits have been reached. If this is the case, do the following in order to create and use a personal token, which extends the limitations:
+- Uncomment lines 40 and 45 in [build.gradle](https://github.com/noloman/abnrepos/blob/main/app/build.gradle)
+- Uncomment line 9 in [GithubService](https://github.com/noloman/abnrepos/blob/main/app/src/main/java/com/nulltwenty/abnrepos/data/api/service/GithubService.kt)
+- Generated a personal Github token that has the repo permissions
+- Create a string called githubToken and paste the newly created token here.
+- Sync gradle, build the app and try again.
