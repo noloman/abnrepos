@@ -32,6 +32,6 @@ Although it has been tested, I could not test the [RepositoriesRepository](https
 - Sometimes the Github API complains that the limits have been reached. If this is the case, do the following in order to create and use a personal token, which extends the limitations:
 - Uncomment lines 40 and 45 in [build.gradle](https://github.com/noloman/abnrepos/blob/main/app/build.gradle)
 - Uncomment line 9 in [GithubService](https://github.com/noloman/abnrepos/blob/main/app/src/main/java/com/nulltwenty/abnrepos/data/api/service/GithubService.kt)
-- Generated a personal Github token that has the repo permissions
-- Create a string called githubToken and paste the newly created token here.
+- Generated a personal Github token that has the repo permissions.
+- Create a string called `githubToken` and paste the newly created token in the `gradle.properties`. It should look like `githubToken=mytoken`.
 - Sync gradle, build the app and try again.
