@@ -88,7 +88,7 @@ dependencies {
     kapt 'com.google.dagger:hilt-android-compiler:2.44'
     implementation "androidx.fragment:fragment-ktx:1.6.2"
     // Persistence
-    implementation "androidx.room:room-runtime:2.5.0-beta01"
+    implementation "androidx.room:room-runtime:2.6.1"
     implementation "androidx.room:room-ktx:2.6.1"
     kapt "androidx.room:room-compiler:2.6.1"
     implementation "androidx.room:room-paging:2.6.1"
