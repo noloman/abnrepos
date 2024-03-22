@@ -93,7 +93,7 @@ dependencies {
     kapt "androidx.room:room-compiler:2.5.0-beta01"
     implementation "androidx.room:room-paging:2.5.0-beta01"
     implementation "androidx.navigation:navigation-fragment-ktx:2.7.7"
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.2"
+    implementation "androidx.navigation:navigation-ui-ktx:2.7.7"
     // Testing
     testImplementation "androidx.room:room-testing:2.5.0-beta01"
     testImplementation 'junit:junit:4.13.2'
