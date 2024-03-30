@@ -114,7 +114,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     // Hilt for instrumented tests.
-    androidTestImplementation "com.google.dagger:hilt-android-testing:2.51"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:2.51.1"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:2.51.1"
     // https://mvnrepository.com/artifact/androidx.fragment/fragment-testing
     debugImplementation 'androidx.fragment:fragment-testing:1.6.2'
