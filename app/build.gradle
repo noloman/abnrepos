@@ -117,6 +117,6 @@ dependencies {
     androidTestImplementation "com.google.dagger:hilt-android-testing:2.51.1"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:2.51.1"
     // https://mvnrepository.com/artifact/androidx.fragment/fragment-testing
-    debugImplementation 'androidx.fragment:fragment-testing:1.7.0'
+    debugImplementation 'androidx.fragment:fragment-testing:1.7.1'
     implementation 'ru.beryukhov:flowreactivenetwork:1.0.4'
 }
