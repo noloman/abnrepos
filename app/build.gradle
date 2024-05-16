@@ -99,8 +99,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation "org.mockito.kotlin:mockito-kotlin:5.3.1"
     androidTestImplementation "org.mockito.kotlin:mockito-kotlin:5.3.1"
-    testImplementation "io.mockk:mockk-android:1.13.10"
-    androidTestImplementation "io.mockk:mockk-android:1.13.10"
+    testImplementation "io.mockk:mockk-android:1.13.11"
+    androidTestImplementation "io.mockk:mockk-android:1.13.11"
     testImplementation "io.mockk:mockk-agent:1.13.11"
     androidTestImplementation "io.mockk:mockk-agent:1.13.11"
     testImplementation 'org.mockito:mockito-core:5.12.0'
