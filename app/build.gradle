@@ -85,7 +85,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.4'
     implementation 'io.coil-kt:coil:2.7.0'
     implementation 'com.google.dagger:hilt-android:2.52'
-    kapt 'com.google.dagger:hilt-android-compiler:2.51.1'
+    kapt 'com.google.dagger:hilt-android-compiler:2.52'
     implementation "androidx.fragment:fragment-ktx:1.8.2"
     // Persistence
     implementation "androidx.room:room-runtime:2.6.1"
@@ -115,7 +115,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     // Hilt for instrumented tests.
     androidTestImplementation "com.google.dagger:hilt-android-testing:2.51.1"
-    kaptAndroidTest "com.google.dagger:hilt-android-compiler:2.51.1"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:2.52"
     // https://mvnrepository.com/artifact/androidx.fragment/fragment-testing
     debugImplementation 'androidx.fragment:fragment-testing:1.8.2'
     implementation 'ru.beryukhov:flowreactivenetwork:1.0.4'
